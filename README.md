@@ -1,58 +1,128 @@
-My Package
-============
-This is a [Kurtosis package](https://docs.kurtosis.com/concepts-reference/packages). It doesn't do much now, but it will soon!
+Postgres Package
+================
+This is a [Kurtosis package](https://docs.kurtosis.com/concepts-reference/packages) for starting a Postgres instance.
 
 Run this package
 ----------------
 Open [the Kurtosis playground](https://gitpod.io/#/https://github.com/kurtosis-tech/playground-gitpod) and run:
 
-<!-- TODO replace YOURUSER and THISREPO with the correct values -->
 ```bash
-kurtosis run github.com/YOURUSER/THISREPO
+kurtosis run github.com/kurtosis-tech/postgres-package
 ```
 
 To run it locally, [install Kurtosis][install-kurtosis] and run the same.
 
+The information for accessing the Postgres port will be outputted as a result of the run:
+
+```
+========================================== User Services ==========================================
+UUID           Name       Ports                                                  Status
+d411d8452f44   postgres   postgresql: 5432/tcp -> postgresql://127.0.0.1:65332   RUNNING
+```
+
 To blow away the created [enclave][enclaves-reference], run `kurtosis clean -a`.
+
+#### Return value
+
+See the "Using this package in your package" section below.
+
 
 #### Configuration
 
 <details>
     <summary>Click to see configuration</summary>
 
-<!-- You can parameterize your package as you prefer; see https://docs.kurtosis.com/next/concepts-reference/args for more -->
-You can configure this package using the following JSON structure:
+You can configure this package using the following JSON structure (though note that `//` lines aren't valid JSON, so you must remove them!). The default value each parameter will take if omitted is shown here:
 
 ```javascript
 {
-    "name": "John Snow"
+    // The Docker image that will be run
+    "image": "postgres:alpine",
+
+    // The name given to the service that gets added
+    "name": "postgres",
+
+    // The name of the user that will be created
+    "user": "postgres",
+
+    // The password given to the created user
+    "password": "MyPassword1!",
+
+    // The name of the database that will be created
+    "database": "postgres",
 }
 ```
 
 For example:
 
-<!-- TODO replace YOURUSER and THISREPO with the correct values -->
 ```bash
-kurtosis run github.com/YOURUSER/THISREPO '{"name":"Maynard James Keenan"}'
+kurtosis run github.com/kurtosis-tech/postgres-package '{"image":"postgres:15.2-alpine","user":"johnsnow"}'
 ```
 
 </details>
 
 Use this package in your package
 --------------------------------
-Kurtosis packages can be composed inside other Kurtosis packages. To use this package in your package:
+Kurtosis packages can be composed inside other Kurtosis packages. To use this package in your package...
 
-<!-- TODO Replace YOURUSER and THISREPO with the correct values! -->
 First, import this package by adding the following to the top of your Starlark file:
 
 ```python
-this_package = import_module("github.com/YOURUSER/THISREPO/main.star")
+postgres = import_module("github.com/kurtosis-tech/postgres-package/main.star")
 ```
 
 Then, call the this package's `run` function somewhere in your Starlark script:
 
 ```python
-this_package_output = this_package.run(plan, args)
+postgres_output = postgres.run(plan, args)
+```
+
+The `run` function of this package will return a struct with the following properties:
+
+```python
+postgres_output = postgres.run(plan, args)
+
+# An Service object instance (see https://docs.kurtosis.com/starlark-reference/service)
+# Used to get information about the Postgres instance
+postgres_output.service
+
+# A PortSpec object containing information about the port Postgres is listening on (see https://docs.kurtosis.com/starlark-reference/port-spec)
+postgres_output.port
+
+# The user that the Postgres service was created with
+postgres.user
+
+# The password the user was created with
+postgres.password
+
+# The name of the Postgres database
+postgres.database
+```
+
+This can be used to depend on the created Postgres service:
+
+```python
+postgres_output = postgres.run(plan, args)
+postgres_service = postgres_output.service
+postgres_port = postgres_output.port
+
+# Depends on Postgres
+postgres_url = "{protocol}://{user}:{password}@{hostname}/{database}".format(
+    protocol = postgres_port.application_protocol,
+    user = postgres_output.user,
+    password = postgres_output.password,
+    hostname = postgres_service.hostname,
+    database = postgres_output.database,
+)
+plan.add_service(
+    name = "my-app",
+    config = ServiceConfig(
+        image = "my-app",
+        env_vars = {
+            "POSTGRES": postgres_url,
+        }
+    )
+)
 ```
 
 Develop on this package
@@ -65,3 +135,4 @@ Develop on this package
 <!-------------------------------- LINKS ------------------------------->
 [install-kurtosis]: https://docs.kurtosis.com/install
 [enclaves-reference]: https://docs.kurtosis.com/concepts-reference/enclaves
+[service-reference]: https://docs.kurtosis.com/starlark-reference/plan

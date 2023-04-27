@@ -1,18 +1,41 @@
-# NOTE: If you're a VSCode user, you might like our VSCode extension: https://marketplace.visualstudio.com/items?itemName=Kurtosis.kurtosis-extension
+IMAGE_ARG_KEY = "image"
+SERVICE_NAME_ARG_KEY = "name"
+DATABASE_ARG_KEY = "database"
+USER_ARG_KEY = "user"
+PASSWORD_ARG_KEY = "password"
 
-# For more information on...
-#  - the 'run' function:  https://docs.kurtosis.com/concepts-reference/packages#runnable-packages
-#  - the 'plan' object:   https://docs.kurtosis.com/starlark-reference/plan
-#  - the 'args' object:   https://docs.kurtosis.com/next/concepts-reference/args
+PORT_NAME = "postgresql"
+
 def run(plan, args):
-    args = override_default_args(args)
-    plan.print("Hello, " + args["name"])
 
+    image = args.get(IMAGE_ARG_KEY, "postgres:alpine")
+    service_name = args.get(SERVICE_NAME_ARG_KEY, "postgres")
+    user = args.get(USER_ARG_KEY, "postgres")
+    password = args.get(PASSWORD_ARG_KEY, "MyPassword1!")
+    database = args.get(DATABASE_ARG_KEY, "postgres")
 
-def override_default_args(args):
-    default_args = {
-        "name": "John Snow"
-    }
+    postgres_service = plan.add_service(
+        name = service_name,
+        config = ServiceConfig(
+            image = image,
+            ports = {
+                PORT_NAME: PortSpec(
+                    number = 5432,
+                    application_protocol = "postgresql",
+                )
+            },
+            env_vars = {
+                "POSTGRES_DB": database,
+                "POSTGRES_USER": user,
+                "POSTGRES_PASSWORD": password,
+            },
+        )
+    )
 
-    # See https://github.com/bazelbuild/starlark/blob/master/spec.md for all the cool stuff you can do in Starlark
-    return default_args | args
+    return struct(
+        service = postgres_service,
+        port = postgres_service.ports[PORT_NAME],
+        user = user,
+        password = password,
+        database = database,
+    )
