@@ -4,13 +4,13 @@ This is a [Kurtosis package](https://docs.kurtosis.com/concepts-reference/packag
 
 Run this package
 ----------------
-Open [the Kurtosis playground](https://gitpod.io/#/https://github.com/kurtosis-tech/playground-gitpod) and run:
+If [you have Kurtosis installed][install-kurtosis], you can run: 
 
 ```bash
 kurtosis run github.com/kurtosis-tech/postgres-package
 ```
 
-To run it locally, [install Kurtosis][install-kurtosis] and run the same.
+If you don't have Kurtosis installed, [click here to run this package on the Kurtosis playground](https://gitpod.io/#KURTOSIS_PACKAGE_LOCATOR=github.com%2Fkurtosis-tech%2Fpostgres-package/https://github.com/kurtosis-tech/playground-gitpod).
 
 The information for accessing the Postgres port will be outputted as a result of the run:
 
