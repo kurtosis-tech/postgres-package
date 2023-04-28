@@ -6,6 +6,7 @@ PASSWORD_ARG_KEY = "password"
 CONFIG_FILE_ARTIFACT_ARG_KEY = "configFileArtifact"
 
 PORT_NAME = "postgresql"
+APPLICATION_PROTOCOL = "postgresql"
 
 CONFIG_FILE_MOUNT_DIRPATH = "/config"
 CONFIG_FILENAME = "postgresql.conf"  # Expected to be in the artifact
@@ -20,10 +21,13 @@ def run(plan, args):
     config_file_artifact_name = args.get(CONFIG_FILE_ARTIFACT_ARG_KEY, "")
 
     cmd = []
-    if config_file_artifact_name != "" {
+    files = {}
+    if config_file_artifact_name != "":
         config_filepath = CONFIG_FILE_MOUNT_DIRPATH + "/" + CONFIG_FILENAME
         cmd += ["-c", "config_file=" + config_filepath]
-    }
+        files = {
+            CONFIG_FILE_MOUNT_DIRPATH: config_file_artifact_name,
+        }
 
     postgres_service = plan.add_service(
         name = service_name,
@@ -32,7 +36,7 @@ def run(plan, args):
             ports = {
                 PORT_NAME: PortSpec(
                     number = 5432,
-                    application_protocol = "postgresql",
+                    application_protocol = APPLICATION_PROTOCOL,
                 )
             },
             cmd = cmd,
@@ -41,13 +45,20 @@ def run(plan, args):
                 "POSTGRES_USER": user,
                 "POSTGRES_PASSWORD": password,
             },
-            files = {
-                CONFIG_FILE_MOUNT_DIRPATH: config_file_artifact_name,
-            }
+            files = files,
         )
     )
 
+    url = "{protocol}://{user}:{password}@{hostname}/{database}".format(
+        protocol = APPLICATION_PROTOCOL,
+        user = user,
+        password = password,
+        hostname = postgres_service.hostname,
+        database = database,
+    )
+
     return struct(
+        url = url,
         service = postgres_service,
         port = postgres_service.ports[PORT_NAME],
         user = user,

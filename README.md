@@ -87,6 +87,9 @@ The `run` function of this package will return a struct with the following prope
 ```python
 postgres_output = postgres.run(plan, args)
 
+# A convenience URL for depending on the started Postgres, of the form postgresql://USER:PASSWORD@HOSTNAME/DATABASE
+postgres_output.url
+
 # An Service object instance (see https://docs.kurtosis.com/starlark-reference/service)
 # Used to get information about the Postgres instance
 postgres_output.service
@@ -95,36 +98,27 @@ postgres_output.service
 postgres_output.port
 
 # The user that the Postgres service was created with
-postgres.user
+postgres_output.user
 
 # The password the user was created with
-postgres.password
+postgres_output.password
 
 # The name of the Postgres database
-postgres.database
+postgres_output.database
 ```
 
 This can be used to depend on the created Postgres service:
 
 ```python
 postgres_output = postgres.run(plan, args)
-postgres_service = postgres_output.service
-postgres_port = postgres_output.port
 
 # Depends on Postgres
-postgres_url = "{protocol}://{user}:{password}@{hostname}/{database}".format(
-    protocol = postgres_port.application_protocol,
-    user = postgres_output.user,
-    password = postgres_output.password,
-    hostname = postgres_service.hostname,
-    database = postgres_output.database,
-)
 plan.add_service(
     name = "my-app",
     config = ServiceConfig(
         image = "my-app",
         env_vars = {
-            "POSTGRES": postgres_url,
+            "POSTGRES": postgres_output.url,
         }
     )
 )
