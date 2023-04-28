@@ -3,7 +3,7 @@ SERVICE_NAME_ARG_KEY = "name"
 DATABASE_ARG_KEY = "database"
 USER_ARG_KEY = "user"
 PASSWORD_ARG_KEY = "password"
-CONFIG_FILE_ARTIFACT_ARG_KEY = "configFileArtifact"
+CONFIG_FILE_ARTIFACT_ARG_KEY = "config_file_artifact"
 
 PORT_NAME = "postgresql"
 APPLICATION_PROTOCOL = "postgresql"
