@@ -50,6 +50,10 @@ You can configure this package using the following JSON structure (though note t
 
     // The name of the database that will be created
     "database": "postgres",
+
+    // The name of a files artifact that should contain a 'postgresql.conf' file for configuring the database
+    // The default value indicates that no custom config file will be used
+    "configFileArtifact": ""
 }
 ```
 
