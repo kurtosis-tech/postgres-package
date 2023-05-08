@@ -57,13 +57,13 @@ You can configure this package using the following JSON structure (though note t
     "config_file_artifact": "",
 
     // The name of a files artifact (https://docs.kurtosis.com/concepts-reference/files-artifacts) that should contain 
-    // it is sql file which will be called to seed the database with data
+    // it is a sql file which will be called to seed the database with data
     // the default value indicates that nothing to seed
     "seed_file_artifact": "",
 
-    // comma separated key=value postgres config to overide default values
-    // example: "log_connections=yes"
-    "postgres_config": "",
+    // It is an array of key=value string that overrides postgres config default values.
+    // example: "[log_connections=yes]"
+    "postgres_config": [],
 }
 ```
 

@@ -22,9 +22,9 @@ def run(plan, args):
     image = args.get(IMAGE_ARG_KEY, "postgres:alpine")
     service_name = args.get(SERVICE_NAME_ARG_KEY, "postgres")
     user = args.get(USER_ARG_KEY, "postgres")
-    password = args.get(PASSWORD_ARG_KEY, "postgres")
+    password = args.get(PASSWORD_ARG_KEY, "MyPassword1!")
     database = args.get(DATABASE_ARG_KEY, "postgres")
-    postgres_config = args.get(POSTGRES_CONFIG_KEY, "")
+    postgres_configs = args.get(POSTGRES_CONFIG_KEY, [])
     config_file_artifact_name = args.get(CONFIG_FILE_ARTIFACT_ARG_KEY, "")
     seed_file_artifact_name = args.get(SEED_FILE_ARTIFACT_ARG_KEY, "")
 
@@ -35,11 +35,10 @@ def run(plan, args):
         cmd += ["-c", "config_file=" + config_filepath]
         files[CONFIG_FILE_MOUNT_DIRPATH] = config_file_artifact_name
 
-    # comma separated postgres config key=value pairs
-    if postgres_config != "":
-        cfgs = postgres_config.split(",")
-        for cfg in cfgs:
-            cmd += ["-c", cfg]
+    # append cmd with postgres config overrides passed by users
+    if len(postgres_configs) > 0:
+        for postgres_config in postgres_configs:
+            cmd += ["-c", postgres_config]
 
     if seed_file_artifact_name != "":
         files[SEED_FILE_MOUNT_PATH] = seed_file_artifact_name
