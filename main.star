@@ -18,7 +18,7 @@ SEED_FILE_MOUNT_PATH = "/docker-entrypoint-initdb.d"
 
 CONFIG_FILENAME = "postgresql.conf"  # Expected to be in the artifact
 
-def run(plan, args):
+def run(plan, args = {}):
     image = args.get(IMAGE_ARG_KEY, "postgres:alpine")
     service_name = args.get(SERVICE_NAME_ARG_KEY, "postgres")
     user = args.get(USER_ARG_KEY, "postgres")
