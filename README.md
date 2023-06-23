@@ -49,19 +49,18 @@ You can configure this package using the following JSON structure (though note t
     "password": "MyPassword1!",
 
     // The name of the database that will be created
+    // OPTIONAL
     "database": "postgres",
 
     // The name of a files artifact (https://docs.kurtosis.com/concepts-reference/files-artifacts) that should contain 
     // a 'postgresql.conf' file for configuring the database.
-    // The default value indicates that no custom config file will be used
     "config_file_artifact": "",
 
     // The name of a files artifact (https://docs.kurtosis.com/concepts-reference/files-artifacts) that should contain 
-    // it is a sql file which will be called to seed the database with data
-    // the default value indicates that nothing to seed
+    // SQL files which will be called upon server startup to seed the database
     "seed_file_artifact": "",
 
-    // It is an array of key=value string that overrides postgres config default values.
+    // An array of key=value string that overrides postgres config default values.
     // example: "[log_connections=yes]"
     "postgres_config": [],
 }
