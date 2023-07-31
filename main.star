@@ -79,3 +79,13 @@ def run(plan, args = {}):
         password = password,
         database = database,
     )
+
+def run_query(plan, service, user, password, database, query):
+    url = "{protocol}://{user}:{password}@{hostname}/{database}".format(
+        protocol = APPLICATION_PROTOCOL,
+        user = user,
+        password = password,
+        hostname = service.hostname,
+        database = database,
+    )
+    return plan.exec(service.name, recipe=ExecRecipe(command=["psql", url, "-c", query]))
