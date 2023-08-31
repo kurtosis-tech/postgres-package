@@ -9,7 +9,7 @@ CONFIG_FILENAME = "postgresql.conf"  # Expected to be in the artifact
 def run(
     plan,
     image = "postgres:alpine",  # type: string
-    name ="postgres",           # type: string
+    service_name ="postgres",           # type: string
     user = "postgres",          # type: string
     password = "MyPassword1!",  # type: string
     database = "postgres",      # type: string
