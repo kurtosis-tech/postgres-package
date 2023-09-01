@@ -1,15 +1,3 @@
-IMAGE_ARG_KEY = "image"
-SERVICE_NAME_ARG_KEY = "name"
-DATABASE_ARG_KEY = "database"
-USER_ARG_KEY = "user"
-PASSWORD_ARG_KEY = "password"
-
-# comma separated postgres config key=value pairs
-POSTGRES_CONFIG_KEY = "postgres_config"
-
-SEED_FILE_ARTIFACT_ARG_KEY = "seed_file_artifact"
-CONFIG_FILE_ARTIFACT_ARG_KEY = "config_file_artifact"
-
 PORT_NAME = "postgresql"
 APPLICATION_PROTOCOL = "postgresql"
 
@@ -18,16 +6,25 @@ SEED_FILE_MOUNT_PATH = "/docker-entrypoint-initdb.d"
 
 CONFIG_FILENAME = "postgresql.conf"  # Expected to be in the artifact
 
-def run(plan, args = {}):
-    image = args.get(IMAGE_ARG_KEY, "postgres:alpine")
-    service_name = args.get(SERVICE_NAME_ARG_KEY, "postgres")
-    user = args.get(USER_ARG_KEY, "postgres")
-    password = args.get(PASSWORD_ARG_KEY, "MyPassword1!")
-    database = args.get(DATABASE_ARG_KEY, "postgres")
-    postgres_configs = args.get(POSTGRES_CONFIG_KEY, [])
-    config_file_artifact_name = args.get(CONFIG_FILE_ARTIFACT_ARG_KEY, "")
-    seed_file_artifact_name = args.get(SEED_FILE_ARTIFACT_ARG_KEY, "")
+def run(
+    plan,
+    image = "postgres:alpine",  # type: string
+    service_name ="postgres",           # type: string
+    user = "postgres",          # type: string
+    password = "MyPassword1!",  # type: string
+    database = "postgres",      # type: string
 
+    # The name of a files artifact that contains a Postgres config file in it
+    # If not empty, this will be used to configure the Postgres server
+    config_file_artifact_name = "", # type: string
+
+    # The name of a files artifact containing seed data
+    # If not empty, the Postgres server will be populated with the data upon start
+    seed_file_artifact_name = "",   # type: string
+
+    # Each argument gets passed as a '-c' argument to the Postgres server
+    extra_configs = [],
+):
     cmd = []
     files = {}
     if config_file_artifact_name != "":
@@ -36,9 +33,9 @@ def run(plan, args = {}):
         files[CONFIG_FILE_MOUNT_DIRPATH] = config_file_artifact_name
 
     # append cmd with postgres config overrides passed by users
-    if len(postgres_configs) > 0:
-        for postgres_config in postgres_configs:
-            cmd += ["-c", postgres_config]
+    if len(extra_configs) > 0:
+        for config in extra_configs:
+            cmd += ["-c", config]
 
     if seed_file_artifact_name != "":
         files[SEED_FILE_MOUNT_PATH] = seed_file_artifact_name
