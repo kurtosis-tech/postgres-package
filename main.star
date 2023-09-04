@@ -8,10 +8,20 @@ CONFIG_FILENAME = "postgresql.conf"  # Expected to be in the artifact
 
 def run(
     plan,
+
+    # The container image that the Postgres service will be started with
     image = "postgres:alpine",  # type: string
+
+    # The name to give the Postgres service
     service_name ="postgres",           # type: string
+
+    # The user to create the Postgres database with
     user = "postgres",          # type: string
+
+    # The password to give to the created user
     password = "MyPassword1!",  # type: string
+
+    # The name of the database to create
     database = "postgres",      # type: string
 
     # The name of a files artifact that contains a Postgres config file in it
