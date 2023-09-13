@@ -8,33 +8,29 @@ CONFIG_FILENAME = "postgresql.conf"  # Expected to be in the artifact
 
 def run(
     plan,
-
-    # The container image that the Postgres service will be started with
     image = "postgres:alpine",  # type: string
-
-    # The name to give the Postgres service
     service_name ="postgres",           # type: string
-
-    # The user to create the Postgres database with
     user = "postgres",          # type: string
-
-    # The password to give to the created user
     password = "MyPassword1!",  # type: string
-
-    # The name of the database to create
     database = "postgres",      # type: string
-
-    # The name of a files artifact that contains a Postgres config file in it
-    # If not empty, this will be used to configure the Postgres server
     config_file_artifact_name = "", # type: string
-
-    # The name of a files artifact containing seed data
-    # If not empty, the Postgres server will be populated with the data upon start
     seed_file_artifact_name = "",   # type: string
-
-    # Each argument gets passed as a '-c' argument to the Postgres server
     extra_configs = [],
 ):
+    """Launches a Postgresql database instance, optionally seeding it with a SQL file script
+
+    Args:
+        image (string): The container image that the Postgres service will be started with
+        service_name (string): The name to give the Postgres service
+        user (string): The user to create the Postgres database with
+        password (string): The password to give to the created user
+        database (string): The name of the database to create
+        config_file_artifact_name (string): The name of a files artifact that contains a Postgres config file in it
+            If not empty, this will be used to configure the Postgres server
+        seed_file_artifact_name (string): The name of a files artifact containing seed data
+            If not empty, the Postgres server will be populated with the data upon start
+        extra_configs: Each argument gets passed as a '-c' argument to the Postgres server
+    """
     cmd = []
     files = {}
     if config_file_artifact_name != "":
