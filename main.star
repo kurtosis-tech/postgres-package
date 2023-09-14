@@ -3,6 +3,7 @@ APPLICATION_PROTOCOL = "postgresql"
 
 CONFIG_FILE_MOUNT_DIRPATH = "/config"
 SEED_FILE_MOUNT_PATH = "/docker-entrypoint-initdb.d"
+DATA_DIRECTORY_PATH="/data/"
 
 CONFIG_FILENAME = "postgresql.conf"  # Expected to be in the artifact
 
@@ -61,7 +62,11 @@ def run(
         ```
     """
     cmd = []
-    files = {}
+    files = {
+        DATA_DIRECTORY_PATH: Directory(
+            persistent_key="postgres_data_folder",
+        ),
+    }
     if config_file_artifact_name != "":
         config_filepath = CONFIG_FILE_MOUNT_DIRPATH + "/" + CONFIG_FILENAME
         cmd += ["-c", "config_file=" + config_filepath]
@@ -90,6 +95,7 @@ def run(
                 "POSTGRES_DB": database,
                 "POSTGRES_USER": user,
                 "POSTGRES_PASSWORD": password,
+                "PGDATA": DATA_DIRECTORY_PATH,
             },
             files = files,
         )
