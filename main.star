@@ -29,7 +29,36 @@ def run(
             If not empty, this will be used to configure the Postgres server
         seed_file_artifact_name (string): The name of a files artifact containing seed data
             If not empty, the Postgres server will be populated with the data upon start
-        extra_configs: Each argument gets passed as a '-c' argument to the Postgres server
+        extra_configs (list[string]): Each argument gets passed as a '-c' argument to the Postgres server
+    Returns:
+        An object containing useful information about the Postgres database running inside the enclave:
+        ```
+        {
+            "database": "postgres",
+            "password": "MyPassword1!",
+            "port": {
+                "application_protocol": "postgresql",
+                "number": 5432,
+                "transport_protocol": "TCP",
+                "wait": "2m0s"
+            },
+            "service": {
+                "hostname": "postgres",
+                "ip_address": "172.16.0.4",
+                "name": "postgres",
+                "ports": {
+                    "postgresql": {
+                        "application_protocol": "postgresql",
+                        "number": 5432,
+                        "transport_protocol": "TCP",
+                        "wait": "2m0s"
+                    }
+                }
+            },
+            "url": "postgresql://postgres:MyPassword1!@postgres/postgres",
+            "user": "postgres"
+        }
+        ```
     """
     cmd = []
     files = {}
