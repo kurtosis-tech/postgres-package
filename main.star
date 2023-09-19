@@ -9,13 +9,13 @@ CONFIG_FILENAME = "postgresql.conf"  # Expected to be in the artifact
 
 def run(
     plan,
-    image = "postgres:alpine",  # type: string
-    service_name ="postgres",           # type: string
-    user = "postgres",          # type: string
-    password = "MyPassword1!",  # type: string
-    database = "postgres",      # type: string
-    config_file_artifact_name = "", # type: string
-    seed_file_artifact_name = "",   # type: string
+    image = "postgres:alpine",
+    service_name ="postgres",
+    user = "postgres",
+    password = "MyPassword1!",
+    database = "postgres",
+    config_file_artifact_name = "",
+    seed_file_artifact_name = "",
     extra_configs = [],
 ):
     """Launches a Postgresql database instance, optionally seeding it with a SQL file script
