@@ -18,7 +18,7 @@ def run(
     config_file_artifact_name="",
     seed_file_artifact_name="",
     extra_configs=[],
-    persistent=False,
+    persistent=True,
 ):
     """Launches a Postgresql database instance, optionally seeding it with a SQL file script
 
@@ -33,7 +33,7 @@ def run(
         seed_file_artifact_name (string): The name of a files artifact containing seed data
             If not empty, the Postgres server will be populated with the data upon start
         extra_configs (list[string]): Each argument gets passed as a '-c' argument to the Postgres server
-        persistent (bool): Whether the data should be persisted. Defaults to False; Note that this isn't supported on multi node k8s cluster as of 2023-10-16
+        persistent (bool): Whether the data should be persisted. Defaults to True; Note that this isn't supported on multi node k8s cluster as of 2023-10-16
     Returns:
         An object containing useful information about the Postgres database running inside the enclave:
         ```
