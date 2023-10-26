@@ -1,3 +1,5 @@
+adminer_module = import_module("github.com/bharath-123/db-adminer-package/main.star")
+
 PORT_NAME = "postgresql"
 APPLICATION_PROTOCOL = "postgresql"
 
@@ -18,7 +20,8 @@ def run(
     config_file_artifact_name="",
     seed_file_artifact_name="",
     extra_configs=[],
-    persistent=True,
+    persistent=False,
+    launch_adminer=True,
 ):
     """Launches a Postgresql database instance, optionally seeding it with a SQL file script
 
@@ -33,7 +36,8 @@ def run(
         seed_file_artifact_name (string): The name of a files artifact containing seed data
             If not empty, the Postgres server will be populated with the data upon start
         extra_configs (list[string]): Each argument gets passed as a '-c' argument to the Postgres server
-        persistent (bool): Whether the data should be persisted. Defaults to True; Note that this isn't supported on multi node k8s cluster as of 2023-10-16
+        persistent (bool): Whether the data should be persisted. Defaults to False; Note that this isn't supported on multi node k8s cluster as of 2023-10-16
+        launch_adminer (bool): Whether to launch adminer. Defaults to True. 
     Returns:
         An object containing useful information about the Postgres database running inside the enclave:
         ```
@@ -106,6 +110,15 @@ def run(
             env_vars=env_vars,
         ),
     )
+
+    if launch_adminer:
+        adminer = adminer_module.run(plan, 
+            default_db=database, 
+            default_driver="pgsql", 
+            default_password=password, 
+            default_server=postgres_service.hostname, 
+            default_username=user
+        )
 
     url = "{protocol}://{user}:{password}@{hostname}/{database}".format(
         protocol=APPLICATION_PROTOCOL,
