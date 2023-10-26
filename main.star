@@ -38,7 +38,7 @@ def run(
             If not empty, the Postgres server will be populated with the data upon start
         extra_configs (list[string]): Each argument gets passed as a '-c' argument to the Postgres server
         persistent (bool): Whether the data should be persisted. Defaults to False; Note that this isn't supported on multi node k8s cluster as of 2023-10-16
-        launch_adminer (bool): Whether to launch adminer. Defaults to False. 
+        launch_adminer (bool): Whether to launch adminer which launches a website to inspect postgres database entries. Defaults to False. 
     Returns:
         An object containing useful information about the Postgres database running inside the enclave:
         ```
