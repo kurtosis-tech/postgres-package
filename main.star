@@ -10,6 +10,10 @@ DATA_DIRECTORY_PATH = "/data/"
 
 CONFIG_FILENAME = "postgresql.conf"  # Expected to be in the artifact
 
+POSTGRES_MIN_CPU = 10
+POSTGRES_MAX_CPU = 1000
+POSTGRES_MIN_MEMORY = 32
+POSTGRES_MAX_MEMORY = 1024
 
 def run(
     plan,
@@ -23,6 +27,10 @@ def run(
     extra_configs=[],
     persistent=True,
     launch_adminer=False,
+    min_cpu=POSTGRES_MIN_CPU,
+    max_cpu=POSTGRES_MAX_CPU,
+    min_memory=POSTGRES_MIN_MEMORY,
+    max_memory=POSTGRES_MAX_MEMORY,
 ):
     """Launches a Postgresql database instance, optionally seeding it with a SQL file script
 
@@ -39,6 +47,10 @@ def run(
         extra_configs (list[string]): Each argument gets passed as a '-c' argument to the Postgres server
         persistent (bool): Whether the data should be persisted. Defaults to True; Note that this isn't supported on multi node k8s cluster as of 2023-10-16
         launch_adminer (bool): Whether to launch adminer which launches a website to inspect postgres database entries. Defaults to False. 
+        min_cpu (int): Define how much CPU millicores the service should be assigned at least.
+        max_cpu (int): Define how much CPU millicores the service should be assign max.
+        min_memory (int): Define how much MB of memory the service should be assigned at least.
+        max_memory (int): Define how much MB of memory the service should be assigned max.
     Returns:
         An object containing useful information about the Postgres database running inside the enclave:
         ```
@@ -109,6 +121,10 @@ def run(
             cmd=cmd,
             files=files,
             env_vars=env_vars,
+            min_cpu=min_cpu,
+            max_cpu=max_cpu,
+            min_memory=min_memory,
+            max_memory=max_memory,
         ),
     )
 
@@ -136,6 +152,10 @@ def run(
         user=user,
         password=password,
         database=database,
+        min_cpu=min_cpu,
+        max_cpu=max_cpu,
+        min_memory=min_memory,
+        max_memory=max_memory,
     )
 
 
