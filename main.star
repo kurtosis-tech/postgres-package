@@ -15,6 +15,7 @@ POSTGRES_MAX_CPU = 1000
 POSTGRES_MIN_MEMORY = 32
 POSTGRES_MAX_MEMORY = 1024
 
+
 def run(
     plan,
     image="postgres:alpine",
@@ -46,7 +47,7 @@ def run(
             If not empty, the Postgres server will be populated with the data upon start
         extra_configs (list[string]): Each argument gets passed as a '-c' argument to the Postgres server
         persistent (bool): Whether the data should be persisted. Defaults to True; Note that this isn't supported on multi node k8s cluster as of 2023-10-16
-        launch_adminer (bool): Whether to launch adminer which launches a website to inspect postgres database entries. Defaults to False. 
+        launch_adminer (bool): Whether to launch adminer which launches a website to inspect postgres database entries. Defaults to False.
         min_cpu (int): Define how much CPU millicores the service should be assigned at least.
         max_cpu (int): Define how much CPU millicores the service should be assign max.
         min_memory (int): Define how much MB of memory the service should be assigned at least.
@@ -129,12 +130,13 @@ def run(
     )
 
     if launch_adminer:
-        adminer = adminer_module.run(plan, 
-            default_db=database, 
-            default_driver=PG_DRIVER, 
-            default_password=password, 
-            default_server=postgres_service.hostname, 
-            default_username=user
+        adminer = adminer_module.run(
+            plan,
+            default_db=database,
+            default_driver=PG_DRIVER,
+            default_password=password,
+            default_server=postgres_service.hostname,
+            default_username=user,
         )
 
     url = "{protocol}://{user}:{password}@{hostname}/{database}".format(
