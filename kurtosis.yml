@@ -2,5 +2,3 @@ name: "github.com/kurtosis-tech/postgres-package"
 description: |
   # Postgres
   This is the Kurtosis package for launching a Postgres instance. It also contains configuration parameters to help get going with the instance; see the `main.star#run` function for details.
-replace: 
-  github.com/kurtosis-tech/postgres-package: github.com/barnabasbusa/postgres-package
