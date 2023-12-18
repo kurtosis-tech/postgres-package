@@ -94,7 +94,7 @@ def run(
         files[DATA_DIRECTORY_PATH] = Directory(
             persistent_key="postgres_data_folder",
         )
-        env_vars["PGDATA"] = DATA_DIRECTORY_PATH
+        env_vars["PGDATA"] = DATA_DIRECTORY_PATH + "/pgdata"
 
     if config_file_artifact_name != "":
         config_filepath = CONFIG_FILE_MOUNT_DIRPATH + "/" + CONFIG_FILENAME
