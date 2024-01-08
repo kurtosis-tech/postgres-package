@@ -92,7 +92,7 @@ def run(
 
     if persistent:
         files[DATA_DIRECTORY_PATH] = Directory(
-            persistent_key="postgres_data_folder",
+            persistent_key= service_name + "-postgres-data-folder",
         )
         env_vars["PGDATA"] = DATA_DIRECTORY_PATH + "/pgdata"
 
