@@ -53,7 +53,7 @@ def run(
         max_cpu (int): Define how much CPU millicores the service should be assign max.
         min_memory (int): Define how much MB of memory the service should be assigned at least.
         max_memory (int): Define how much MB of memory the service should be assigned max.
-        node_selectors (dict): Define a dict of node selectors - only works in kubernetes example: {"kubernetes.io/hostname": node-name-01}
+        node_selectors (dict[string, string]): Define a dict of node selectors - only works in kubernetes example: {"kubernetes.io/hostname": node-name-01}
     Returns:
         An object containing useful information about the Postgres database running inside the enclave:
         ```
