@@ -32,6 +32,7 @@ def run(
     max_cpu=POSTGRES_MAX_CPU,
     min_memory=POSTGRES_MIN_MEMORY,
     max_memory=POSTGRES_MAX_MEMORY,
+    node_selectors={},
 ):
     """Launches a Postgresql database instance, optionally seeding it with a SQL file script
 
@@ -126,6 +127,7 @@ def run(
             max_cpu=max_cpu,
             min_memory=min_memory,
             max_memory=max_memory,
+            node_selectors=node_selectors,
         ),
     )
 
@@ -158,6 +160,7 @@ def run(
         max_cpu=max_cpu,
         min_memory=min_memory,
         max_memory=max_memory,
+        node_selectors=node_selectors,
     )
 
 
