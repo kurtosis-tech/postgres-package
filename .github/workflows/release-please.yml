@@ -1,0 +1,22 @@
+on:
+  push:
+    branches: [main]
+
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release-please
+
+jobs:
+  release-please:
+    name: "Release please"
+    runs-on: ubuntu-latest
+    if: github.repository == 'kurtosis-tech/postgres-package'
+    steps:
+      - uses: googleapis/release-please-action@d1a8f221d7723166f48a584aebba00ef3f6febec # v4.1.4
+        with:
+          token: "${{ secrets.RELEASER_TOKEN }}"
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
