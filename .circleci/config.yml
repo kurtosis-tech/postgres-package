@@ -3,7 +3,7 @@ version: 2.1
 executors:
   ubuntu_vm:
     machine:
-      image: ubuntu-2004:202201-02
+      image: ubuntu-2404:current
 
 jobs:
   run_starlark:
