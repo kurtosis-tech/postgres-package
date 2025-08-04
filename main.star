@@ -26,6 +26,7 @@ def run(
     config_file_artifact_name="",
     seed_file_artifact_name="",
     extra_configs=[],
+    extra_env_vars={},
     persistent=True,
     launch_adminer=False,
     min_cpu=POSTGRES_MIN_CPU,
@@ -48,6 +49,7 @@ def run(
         seed_file_artifact_name (string): The name of a files artifact containing seed data
             If not empty, the Postgres server will be populated with the data upon start
         extra_configs (list[string]): Each argument gets passed as a '-c' argument to the Postgres server
+        extra_env_vars dict[string, string]: A dict mapping environment variable names to their values; every pair is added to the Postgres container environment.
         persistent (bool): Whether the data should be persisted. Defaults to True; Note that this isn't supported on multi node k8s cluster as of 2023-10-16
         launch_adminer (bool): Whether to launch adminer which launches a website to inspect postgres database entries. Defaults to False.
         min_cpu (int): Define how much CPU millicores the service should be assigned at least.
@@ -93,6 +95,10 @@ def run(
         "POSTGRES_USER": user,
         "POSTGRES_PASSWORD": password,
     }
+
+    # Add extra env vars
+    for k, v in extra_env_vars.items():
+        env_vars[k] = v
 
     if persistent:
         files[DATA_DIRECTORY_PATH] = Directory(
