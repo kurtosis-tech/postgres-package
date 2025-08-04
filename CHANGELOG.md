@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/kurtosis-tech/postgres-package/compare/1.0.0...1.1.0) (2025-08-04)
+
+
+### Features
+
+* add tolerations ([2576e29](https://github.com/kurtosis-tech/postgres-package/commit/2576e29f126bbc34209d63c92b0d68d780fa8edc))
+* add tolerations ([6ebc34f](https://github.com/kurtosis-tech/postgres-package/commit/6ebc34f5692fdae10cf82112ddca4615cbb41214))
+
 ## [1.0.0](https://github.com/kurtosis-tech/postgres-package/compare/0.0.1...1.0.0) (2025-03-19)
 
 
