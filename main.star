@@ -33,6 +33,7 @@ def run(
     min_memory=POSTGRES_MIN_MEMORY,
     max_memory=POSTGRES_MAX_MEMORY,
     node_selectors=None,
+    tolerations=None,
 ):
     """Launches a Postgresql database instance, optionally seeding it with a SQL file script
 
@@ -55,6 +56,7 @@ def run(
         max_memory (int): Define how much MB of memory the service should be assigned max.
         node_selectors (dict[string, string]): Define a dict of node selectors - only works in kubernetes example: {"kubernetes.io/hostname": node-name-01}
     Returns:
+        tolerations (list[dict]): A list of tolerations to apply to the service. This is only used in Kubernetes.
         An object containing useful information about the Postgres database running inside the enclave:
         ```
         {
@@ -99,6 +101,8 @@ def run(
         env_vars["PGDATA"] = DATA_DIRECTORY_PATH + "/pgdata"
     if node_selectors == None:
         node_selectors = {}
+    if tolerations == None:
+        tolerations = []
     if config_file_artifact_name != "":
         config_filepath = CONFIG_FILE_MOUNT_DIRPATH + "/" + CONFIG_FILENAME
         cmd += ["-c", "config_file=" + config_filepath]
@@ -130,6 +134,7 @@ def run(
             min_memory=min_memory,
             max_memory=max_memory,
             node_selectors=node_selectors,
+            tolerations=tolerations,
         ),
     )
 
